@@ -1,7 +1,7 @@
 import logging
 from aiohttp import web
 import config
-from scanner import scan_port
+from scanner import scan_port, BadIpError
 
 log = logging.getLogger('')
 
@@ -15,11 +15,15 @@ async def scaner(request):
     if start_port > finish_port:
         log.info('Начальый порт больше чем конечный')
         return web.Response(body='Начальый порт больше чем конечный', status=400)
-    for i in range(start_port, finish_port):
-        if scan_port(ip, i):
-            result.append({"port": i, "state": "open"})
-        else:
-            result.append({"port": i, "state": "close"})
+    try:
+        for i in range(start_port, finish_port):
+            if scan_port(ip, i):
+                result.append({"port": i, "state": "open"})
+            else:
+                result.append({"port": i, "state": "close"})
+    except BadIpError:
+        return web.Response(status=400, body='Не правильный ip')
+
     return web.json_response(result)
 
 
@@ -32,4 +36,3 @@ async def init():
 if __name__ == "__main__":
     application = init()
     web.run_app(application, host=config.HOST, port=config.PORT)
-
