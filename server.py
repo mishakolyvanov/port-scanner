@@ -12,6 +12,9 @@ async def scaner(request):
     finish_port = int(request.match_info.get('end_port'))
     result = []
     log.info(f'scan port for {ip} from {start_port} to {finish_port}')
+    if start_port > finish_port:
+        log.info('Начальый порт больше чем конечный')
+        return web.Response(body='Начальый порт больше чем конечный', status=400)
     for i in range(start_port, finish_port):
         if scan_port(ip, i):
             result.append({"port": i, "state": "open"})
