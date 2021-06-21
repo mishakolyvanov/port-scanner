@@ -1,19 +1,19 @@
+import logging
 import socket
+import config
 
+log = logging.getLogger()
 
 def scan_port(ip: str, port: int) -> bool:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.settimeout(0.5)
+    sock.settimeout(config.TIME)
     try:
         sock.connect((ip, port))
-        print('Port:', port, 'state: open')
+        log.debug(f'Port: {port} state: open')
         sock.close()
         return True
-    except:
-        print('Port:', port, 'state: close')
+    except socket.timeout:
+        log.debug(f'Port: {port} state: close')
         return False
-
-
-ip = '192.168.1.155'
-for i in range(135, 140):
-    scan_port(ip, i)
+    except Exception as e:
+        log.error(f'Error on check port: {e}')
