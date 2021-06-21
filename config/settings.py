@@ -1,7 +1,7 @@
 import logging
 PORT = 8000
 HOST = '127.0.0.1'
-TIME = 0.5
+CHECKING_TIMEOUT = 0.5
 
 
 LOG_SETTINGS = {

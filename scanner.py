@@ -11,7 +11,7 @@ class BadIpError(Exception):
 
 def scan_port(ip: str, port: int) -> bool:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.settimeout(config.TIME)
+    sock.settimeout(config.CHECKING_TIMEOUT)
     try:
         result = sock.connect_ex((ip, port))
         if result == 0:
