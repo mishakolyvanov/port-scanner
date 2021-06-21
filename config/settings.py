@@ -1,4 +1,4 @@
-import logging, sys
+import logging
 PORT = 8000
 HOST = '127.0.0.1'
 TIME = 0.5
